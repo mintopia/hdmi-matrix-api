@@ -10,7 +10,7 @@ The micro USB port on the front is connected to a CH340 USB to serial adapter in
 
 ## Installation
 
-Install the dependencies using `pip install -r requirements.txt`
+Install the dependencies using `pip install -r requirements.txt`. Then install a web server, I suggest uvicorn by running `pip install "uvicorn[standard]"`.
 
 ## Configuration
 
@@ -19,6 +19,27 @@ Configuration is done using either the `.env` file or through the environment.
 Set `HDMI_MATRIX_DEVICE` to the serial device for the matrix, eg. `HDMI_MATRIX_DEVICE=COM5` or `HDMI_MATRIX_DEVICE=/dev/ttyS0`.
 
 The API key is set using `API_KEY`.
+
+## Docker
+
+An easier way to run it is through Docker and docker compose. Create a docker-compose file like this:
+
+```yaml
+version: '3'
+services:
+  matrix:
+    image: ghcr.io/mintopia/hdmi-matrix-api:develop
+    ports:
+      - 80:80
+    volumes:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    environment:
+      - HDMI_MATRIX_DEVICE=/dev/ttyUSB0
+      - API_KEY=swordfish
+    restart: always
+```
+
+You can then start the API server by running `docker compose up -d`.
 
 ## Usage
 
