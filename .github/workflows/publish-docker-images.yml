@@ -20,7 +20,7 @@ env:
 
 
 jobs:
-  build-nginx:
+  build-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
