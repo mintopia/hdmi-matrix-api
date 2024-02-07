@@ -31,7 +31,7 @@ services:
     image: ghcr.io/mintopia/hdmi-matrix-api:develop
     ports:
       - 80:80
-    volumes:
+    devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
     environment:
       - HDMI_MATRIX_DEVICE=/dev/ttyUSB0

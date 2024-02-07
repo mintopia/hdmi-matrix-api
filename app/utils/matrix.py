@@ -5,7 +5,9 @@ from serial import Serial, SerialException
 
 def send_command(command: str) -> (int, str):
     try:
-        with Serial(os.getenv('HDMI_MATRIX_DEVICE'), 57600, timeout=0.2) as ser:
+        device = os.getenv('HDMI_MATRIX_DEVICE')
+        timeout = float(os.getenv('HDMI_MATRIX_TIMEOUT')) 
+        with Serial(device, 57600, timeout=timeout) as ser:
             ser.write(f"{command}\r\n".encode())
             data = ser.readlines()
             decoded = [line.decode() for line in data]

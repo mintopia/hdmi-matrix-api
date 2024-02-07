@@ -65,9 +65,8 @@ async def output(output_number: int, data: OutputRequest):
     if response_code == 500:
         raise HTTPException(status_code=500, detail=response)
     else:
-        match = re_input.match(response)
         return OutputResponse(
-            number=match.group(1),
-            input=match.group(2),
+            number=output_number,
+            input=data.input,
             rawdata=response
         )
