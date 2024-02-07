@@ -3,15 +3,6 @@ from typing import List
 from pydantic import BaseModel
 
 
-class CascadeResponse(BaseModel):
-    enabled: bool
-    rawdata: str
-
-
-class CascadeRequest(BaseModel):
-    enabled: bool
-
-
 class Input(BaseModel):
     number: int
     edid: int
@@ -25,7 +16,6 @@ class Output(BaseModel):
 class StatusResponse(BaseModel):
     inputs: List[Input]
     outputs: List[Output]
-    cascade: bool
     rawdata: str
 
 

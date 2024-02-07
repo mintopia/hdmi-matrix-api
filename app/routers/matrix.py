@@ -14,18 +14,19 @@ router = APIRouter(
 
 @router.get("/v1/status")
 async def status() -> StatusResponse:
-    response_code, response = send_command(f"EZG STA")
+    response_code, input_response = send_command(f"EZG IN0 EDID")
     if response_code == 500:
-        raise HTTPException(status_code=500, detail=response)
+        raise HTTPException(status_code=500, detail=input_response)
 
-    cas_response_code, cas_response = send_command(f"EZG CAS")
-    if cas_response_code == 500:
-        raise HTTPException(status_code=500, detail=response)
+    response_code, output_response = send_command(f"EZG OUT0 VS")
+    if response_code == 500:
+        raise HTTPException(status_code=500, detail=output_response)
+
+    response = input_response + "\r\n" + output_response
 
     payload = StatusResponse(
         inputs=[],
         outputs=[],
-        cascade=cas_response == 'CAS EN',
         rawdata=response,
     )
 
@@ -42,23 +43,6 @@ async def status() -> StatusResponse:
             ))
 
     return payload
-
-
-@router.post("/v1/cascade")
-async def cascade(data: CascadeRequest) -> CascadeResponse:
-    action = 'DIS'
-    if data.enabled:
-        action = 'EN'
-
-    response_code, response = send_command(f"EZS CAS {action}")
-
-    if response_code == 500:
-        raise HTTPException(status_code=500, detail=response)
-    else:
-        return CascadeResponse(
-            enabled=response == 'CAS EN',
-            rawdata=response,
-        )
 
 
 @router.post("/v1/command")
